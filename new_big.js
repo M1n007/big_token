@@ -225,19 +225,17 @@ const domain = [
         const regex = await new RegExp(/\?(?:code)\=([\S\s]*?)\&/);
 
         const resGex = await regex.exec(decodeURL);
-        await console.log(decodeURL);
-        await console.log(resGex);
-        await console.log(resGex[1]);
+
         console.log(
           "[" +
             " " +
             moment().format("HH:mm:ss") +
             " " +
             "]" +
-            +" " +
+            " " +
             "Proses Verifikasi"
         );
-        const veryf = await functionVerification(email, resGex);
+        const veryf = await functionVerification(email, resGex[1]);
         console.log(
           "[" +
             " " +
