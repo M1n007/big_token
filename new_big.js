@@ -242,7 +242,7 @@ const domain = [
             moment().format("HH:mm:ss") +
             " " +
             "]" +
-            +" " +
+            " " +
             "Veryf Sukses"
         );
         console.log("");
