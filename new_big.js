@@ -6,6 +6,7 @@ const colors = require("./lib/colors");
 const fs = require("async-file");
 const { URLSearchParams } = require("url");
 const moment = require("moment");
+const rp = require("request-promise");
 
 console.log("#####################");
 console.log("Panggil w Amin Tamvan");
@@ -113,6 +114,54 @@ const functionVerification = (email, token) =>
       .then(res => res.text())
       .then(text => resolve(text))
       .catch(err => reject(err));
+  });
+
+const functionGetLocation = domain =>
+  new Promise((resolve, reject) => {
+    // rp({
+    //   uri: "https://bigtoken.page.link/og5e4wEN3Difa11i7",
+    //   method: "GET",
+    //   followAllRedirects: true
+
+    // headers: {
+    //   accept:
+    //     "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+    //   "accept-encoding": "gzip, deflate, br",
+    //   "accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",
+    //   "upgrade-insecure-requests": 1,
+    //   "user-agent":
+    //     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36"
+    // }
+    // }).then(function(response) {
+    //   resolve(response.headers);
+    // });
+
+    const userAgent =
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36";
+    const url = `${domain}`;
+
+    const _include_headers = function(body, response, resolveWithFullResponse) {
+      return {
+        headers: response.headers,
+        data: body,
+        finalUrl: response.request.uri.href // contains final URL
+      };
+    };
+
+    const options = {
+      uri: url,
+      followAllRedirects: true,
+      method: "get",
+      gzip: true,
+      transform: _include_headers,
+      headers: {
+        "User-Agent": userAgent
+      }
+    };
+
+    const p1 = rp(options).then((response, error, html) => {
+      resolve(response.finalUrl);
+    });
   });
 
 const genEmail = length =>
@@ -226,11 +275,13 @@ const domain = [
         console.log("");
         console.log("");
       } else {
-        const decodeURL = await decodeURIComponent(message);
         await delay(DelaY);
+        const getLocation = await functionGetLocation(message);
+        // const decodeURL = await decodeURIComponent(getLocation);
+        
         const regex = await new RegExp(/\?(?:code)\=([\S\s]*?)\&/);
 
-        const resGex = await regex.exec(decodeURL);
+        const resGex = await regex.exec(getLocation);
 
         console.log(
           "[" +
