@@ -66,7 +66,17 @@ const functionCreateEmail = (email, domain) =>
       }
     })
       .then(res => resolve("success create email"))
-      .catch(err => reject(err));
+      .catch(err =>
+        console.log(
+          "[" +
+            " " +
+            moment().format("HH:mm:ss") +
+            " " +
+            "]" +
+            " " +
+            "Ada masalah sssSssstt..."
+        )
+      );
   });
 
 const functionGetMessages = (email, domain) =>
@@ -89,7 +99,17 @@ const functionGetMessages = (email, domain) =>
         const src = $(".button").attr("href");
         resolve(src);
       })
-      .catch(err => reject(err));
+      .catch(err =>
+        console.log(
+          "[" +
+            " " +
+            moment().format("HH:mm:ss") +
+            " " +
+            "]" +
+            " " +
+            "Ada masalah sssSssstt..."
+        )
+      );
   });
 
 const functionVerification = (email, token) =>
@@ -113,7 +133,17 @@ const functionVerification = (email, token) =>
     })
       .then(res => res.text())
       .then(text => resolve(text))
-      .catch(err => reject(err));
+      .catch(err =>
+        console.log(
+          "[" +
+            " " +
+            moment().format("HH:mm:ss") +
+            " " +
+            "]" +
+            " " +
+            "Ada masalah sssSssstt..."
+        )
+      );
   });
 
 const functionGetLocation = domain =>
@@ -159,9 +189,21 @@ const functionGetLocation = domain =>
       }
     };
 
-    const p1 = rp(options).then((response, error, html) => {
-      resolve(response.finalUrl);
-    });
+    const p1 = rp(options)
+      .then((response, error, html) => {
+        resolve(response.finalUrl);
+      })
+      .catch(err =>
+        console.log(
+          "[" +
+            " " +
+            moment().format("HH:mm:ss") +
+            " " +
+            "]" +
+            " " +
+            "Ada masalah sssSssstt..."
+        )
+      );
   });
 
 const genEmail = length =>
@@ -243,7 +285,7 @@ const domain = [
             " " +
             "]" +
             " " +
-            "Gagal Mengambil Link..."
+            "Gagal Mengambil Token..."
         );
         console.log(
           "[" +
@@ -275,10 +317,9 @@ const domain = [
         console.log("");
         console.log("");
       } else {
-        await delay(DelaY);
         const getLocation = await functionGetLocation(message);
         // const decodeURL = await decodeURIComponent(getLocation);
-        
+
         const regex = await new RegExp(/\?(?:code)\=([\S\s]*?)\&/);
 
         const resGex = await regex.exec(getLocation);
