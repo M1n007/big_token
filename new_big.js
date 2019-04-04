@@ -143,7 +143,7 @@ const domain = [
 (async () => {
   for (let index = 0; index < LooP; index++) {
     const item = await domain[(Math.random() * domain.length) | 0];
-    const emel = await genEmail(6);
+    const emel = await genEmail(7);
     await delay(10000);
     const register = await functionRegister(emel, item);
     const email = emel + "@" + item;
