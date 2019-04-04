@@ -122,44 +122,79 @@ const functionGetLocation = domain =>
       .split(" ");
 
     for (let ury in array) {
-      await delay(DelaY);
-      const getLocation = await functionGetLocation(array[ury]);
-      //   console.log(getLocation);
-      //   // const decodeURL = await decodeURIComponent(message);
+      if (array[ury].length == 44) {
+        const getLocation = await functionGetLocation(array[ury]);
 
-      const regex = await new RegExp(/\?(?:code)\=([\S\s]*?)\&/);
-      const regexEm = await new RegExp(/[.\w]+@[\w\-]{3,}(.\w{2,})+/);
-      const resGex = await regex.exec(getLocation);
-      const resGexEm = await regexEm.exec(getLocation);
-      await delay(DelaY);
-      const veryf = await functionVerification(resGexEm[0], resGex[1]);
-      //   const msg = JSON.parse(veryf).error.status;
-      console.log(veryf);
-      //   if (msg === 422) {
-      //     console.log(
-      //       "[" +
-      //         " " +
-      //         moment().format("HH:mm:ss") +
-      //         " " +
-      //         "]" +
-      //         " " +
-      //         `Email : ${resGexEm[0]}` +
-      //         " " +
-      //         "Token Expired"
-      //     );
-      //   } else {
-      //     console.log(
-      //       "[" +
-      //         " " +
-      //         moment().format("HH:mm:ss") +
-      //         " " +
-      //         "]" +
-      //         " " +
-      //         `Email : ${resGexEm[0]}` +
-      //         " " +
-      //         "Veryf Sukses"
-      //     );
-      //   }
+        const regex = await new RegExp(/\?(?:code)\=([\S\s]*?)\&/);
+        const regexEm = await new RegExp(/[.\w]+@[\w\-]{3,}(.\w{2,})+/);
+        const resGex = await regex.exec(getLocation);
+        const resGexEm = await regexEm.exec(getLocation);
+        await delay(DelaY);
+        const veryf = await functionVerification(resGexEm[0], resGex[1]);
+        // const msg = JSON.parse(veryf).error.status;
+
+        if (JSON.parse(veryf).hasOwnProperty("error")) {
+          console.log(
+            "[" +
+              " " +
+              moment().format("HH:mm:ss") +
+              " " +
+              "]" +
+              " " +
+              `Email : ${resGexEm[0]}` +
+              " " +
+              "Token Expired"
+          );
+        } else {
+          console.log(
+            "[" +
+              " " +
+              moment().format("HH:mm:ss") +
+              " " +
+              "]" +
+              " " +
+              `Email : ${resGexEm[0]}` +
+              " " +
+              "Veryf Sukses"
+          );
+        }
+      } else {
+        const decodeURL = await decodeURIComponent(array[ury]);
+
+        const regex = await new RegExp(/\?(?:code)\=([\S\s]*?)\&/);
+        const regexEm = await new RegExp(/[.\w]+@[\w\-]{3,}(.\w{2,})+/);
+        const resGex = await regex.exec(decodeURL);
+        const resGexEm = await regexEm.exec(decodeURL);
+        await delay(DelaY);
+        const veryf = await functionVerification(resGexEm[0], resGex[1]);
+        // const msg = JSON.parse(veryf).error.status;
+        console.log(veryf);
+        if (JSON.parse(veryf).hasOwnProperty("error")) {
+          console.log(
+            "[" +
+              " " +
+              moment().format("HH:mm:ss") +
+              " " +
+              "]" +
+              " " +
+              `Email : ${resGexEm[0]}` +
+              " " +
+              "Token Expired"
+          );
+        } else {
+          console.log(
+            "[" +
+              " " +
+              moment().format("HH:mm:ss") +
+              " " +
+              "]" +
+              " " +
+              `Email : ${resGexEm[0]}` +
+              " " +
+              "Veryf Sukses"
+          );
+        }
+      }
     }
   });
 })();
