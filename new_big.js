@@ -232,24 +232,14 @@ const domain = [
   "mariela1121.club"
 ];
 (async () => {
-  for (let index = 0; index < LooP; index++) {
-    const item = await domain[(Math.random() * domain.length) | 0];
-    const emel = await genEmail(10);
-    await delay(10000);
-    const register = await functionRegister(emel, item);
-    const email = emel + "@" + item;
+  try {
+    for (let index = 0; index < LooP; index++) {
+      const item = await domain[(Math.random() * domain.length) | 0];
+      const emel = await genEmail(10);
+      await delay(10000);
+      const register = await functionRegister(emel, item);
+      const email = emel + "@" + item;
 
-    await console.log(
-      "[" +
-        " " +
-        moment().format("HH:mm:ss") +
-        " " +
-        "]" +
-        " " +
-        "Membuat Email..."
-    );
-
-    if (register === 0) {
       await console.log(
         "[" +
           " " +
@@ -257,99 +247,119 @@ const domain = [
           " " +
           "]" +
           " " +
-          "Sukses register dengan email :" +
-          " " +
-          `${email}`
+          "Membuat Email..."
       );
 
-      const createMail = await functionCreateEmail(emel, item);
-      await console.log(
-        "[" +
-          " " +
-          moment().format("HH:mm:ss") +
-          " " +
-          "]" +
-          " " +
-          "Mengambil Token..."
-      );
-
-      await delay(DelaY);
-
-      const message = await functionGetMessages(emel, item);
-
-      if (message === undefined) {
-        console.log(
+      if (register === 0) {
+        await console.log(
           "[" +
             " " +
             moment().format("HH:mm:ss") +
             " " +
             "]" +
             " " +
-            "Gagal Mengambil Token..."
+            "Sukses register dengan email :" +
+            " " +
+            `${email}`
         );
-        console.log(
+
+        const createMail = await functionCreateEmail(emel, item);
+        await console.log(
           "[" +
             " " +
             moment().format("HH:mm:ss") +
             " " +
             "]" +
             " " +
-            "Cek sendiri dan tunggu dalam beberapa menit/jam kedepan :" +
-            " " +
-            `https://generator.email/${email}`
+            "Mengambil Token..."
         );
-        fs.appendFile(
-          "result_url.txt",
-          `https://generator.email/${email} \n`,
-          "utf-8"
-        );
-        console.log(
-          "[" +
-            " " +
-            moment().format("HH:mm:ss") +
-            " " +
-            "]" +
-            " " +
-            "Lokasi Link :" +
-            " " +
-            `result_url.txt`
-        );
-        console.log("");
-        console.log("");
+
+        await delay(DelaY);
+
+        const message = await functionGetMessages(emel, item);
+
+        if (message === undefined) {
+          console.log(
+            "[" +
+              " " +
+              moment().format("HH:mm:ss") +
+              " " +
+              "]" +
+              " " +
+              "Gagal Mengambil Token..."
+          );
+          console.log(
+            "[" +
+              " " +
+              moment().format("HH:mm:ss") +
+              " " +
+              "]" +
+              " " +
+              "Cek sendiri dan tunggu dalam beberapa menit/jam kedepan :" +
+              " " +
+              `https://generator.email/${email}`
+          );
+          fs.appendFile(
+            "result_url.txt",
+            `https://generator.email/${email} \n`,
+            "utf-8"
+          );
+          console.log(
+            "[" +
+              " " +
+              moment().format("HH:mm:ss") +
+              " " +
+              "]" +
+              " " +
+              "Lokasi Link :" +
+              " " +
+              `result_url.txt`
+          );
+          console.log("");
+          console.log("");
+        } else {
+          const getLocation = await functionGetLocation(message);
+          // const decodeURL = await decodeURIComponent(getLocation);
+
+          const regex = await new RegExp(/\?(?:code)\=([\S\s]*?)\&/);
+
+          const resGex = await regex.exec(getLocation);
+
+          console.log(
+            "[" +
+              " " +
+              moment().format("HH:mm:ss") +
+              " " +
+              "]" +
+              " " +
+              "Proses Verifikasi"
+          );
+          const veryf = await functionVerification(email, resGex[1]);
+          console.log(
+            "[" +
+              " " +
+              moment().format("HH:mm:ss") +
+              " " +
+              "]" +
+              " " +
+              "Veryf Sukses"
+          );
+          console.log("");
+          console.log("");
+        }
       } else {
-        const getLocation = await functionGetLocation(message);
-        // const decodeURL = await decodeURIComponent(getLocation);
-
-        const regex = await new RegExp(/\?(?:code)\=([\S\s]*?)\&/);
-
-        const resGex = await regex.exec(getLocation);
-
         console.log(
           "[" +
             " " +
             moment().format("HH:mm:ss") +
             " " +
-            "]" +
-            " " +
-            "Proses Verifikasi"
-        );
-        const veryf = await functionVerification(email, resGex[1]);
-        console.log(
-          "[" +
-            " " +
-            moment().format("HH:mm:ss") +
-            " " +
-            "]" +
-            " " +
-            "Veryf Sukses"
+            "Email Sudah Terdaftar"
         );
         console.log("");
         console.log("");
       }
-    } else {
-      console.log("Email Sudah Terdaftar");
-      console.log("");
-      console.log("");
     }
+  } catch (e) {
+    handleError(e);
   }
 })();
