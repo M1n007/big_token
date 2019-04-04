@@ -118,7 +118,8 @@ const functionVerification = (email, token) =>
 const genEmail = length =>
   new Promise((resolve, reject) => {
     var text = "";
-    var possible = "abcdefghijklmnopqrstuvwxyz";
+    var possible =
+      "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     for (var i = 0; i < length; i++)
       text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -132,7 +133,12 @@ const domain = [
   "todayemail.ga",
   "jymfit.info",
   "mhdsl.gq",
-  "geraldlover.org"
+  "geraldlover.org",
+  "rav-4.cf",
+  "raffles.gg",
+  "bzymail.top",
+  "moparayez.site",
+  "mariela1121.club"
 ];
 (async () => {
   for (let index = 0; index < LooP; index++) {
