@@ -133,32 +133,33 @@ const functionGetLocation = domain =>
       const resGexEm = await regexEm.exec(getLocation);
       await delay(DelaY);
       const veryf = await functionVerification(resGexEm[0], resGex[1]);
-      const msg = JSON.parse(veryf).error.status;
-      if (msg === 422) {
-        console.log(
-          "[" +
-            " " +
-            moment().format("HH:mm:ss") +
-            " " +
-            "]" +
-            " " +
-            `Email : ${resGexEm[0]}` +
-            " " +
-            "Token Expired"
-        );
-      } else {
-        console.log(
-          "[" +
-            " " +
-            moment().format("HH:mm:ss") +
-            " " +
-            "]" +
-            " " +
-            `Email : ${resGexEm[0]}` +
-            " " +
-            "Veryf Sukses"
-        );
-      }
+      //   const msg = JSON.parse(veryf).error.status;
+      console.log(veryf);
+      //   if (msg === 422) {
+      //     console.log(
+      //       "[" +
+      //         " " +
+      //         moment().format("HH:mm:ss") +
+      //         " " +
+      //         "]" +
+      //         " " +
+      //         `Email : ${resGexEm[0]}` +
+      //         " " +
+      //         "Token Expired"
+      //     );
+      //   } else {
+      //     console.log(
+      //       "[" +
+      //         " " +
+      //         moment().format("HH:mm:ss") +
+      //         " " +
+      //         "]" +
+      //         " " +
+      //         `Email : ${resGexEm[0]}` +
+      //         " " +
+      //         "Veryf Sukses"
+      //     );
+      //   }
     }
   });
 })();
