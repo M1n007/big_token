@@ -162,13 +162,16 @@ const functionGetLocation = domain =>
         const decodeURL = await decodeURIComponent(array[ury]);
 
         const regex = await new RegExp(/\?(?:code)\=([\S\s]*?)\&/);
-        const regexEm = await new RegExp(/[.\w]+@[\w\-]{3,}(.\w{2,})+/);
+        const regexEm = await new RegExp(
+          /([\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/
+        );
         const resGex = await regex.exec(decodeURL);
         const resGexEm = await regexEm.exec(decodeURL);
+
         await delay(DelaY);
         const veryf = await functionVerification(resGexEm[0], resGex[1]);
         // const msg = JSON.parse(veryf).error.status;
-        console.log(veryf);
+
         if (JSON.parse(veryf).hasOwnProperty("error")) {
           console.log(
             "[" +
