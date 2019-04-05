@@ -17,9 +17,6 @@ console.log("");
 
 const Reff = readline.question("Masukan Kode Referal : ");
 const LooP = readline.question("Mau Berapa Banyak ? ");
-const DelaY = readline.question(
-  "Mau Berapa Lama (millisecond), semakin lama semakin besar peluang langsung verifikasi : "
-);
 
 console.log("");
 console.log("");
@@ -253,7 +250,7 @@ const domain = ["uselessmail.online"];
             " " +
             "Mengambil Token..."
         );
-        await delay(DelaY);
+        await delay(120000);
         const message = await functionGetMessages(emel, item);
 
         if (message === undefined) {
