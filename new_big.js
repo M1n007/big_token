@@ -219,17 +219,17 @@ const genEmail = length =>
   });
 
 const domain = [
-  "thinkingus24.com",
-  "nongzaa.gq",
-  "todayemail.ga",
-  "jymfit.info",
-  "mhdsl.gq",
-  "geraldlover.org",
-  "rav-4.cf",
-  "raffles.gg",
-  "bzymail.top",
-  "moparayez.site",
-  "mariela1121.club"
+  "payforclick.org",
+  "cloneviptmc1.club",
+  "emailtech.info",
+  "payforpost.info",
+  "alonzo1121.club",
+  "mimpaharpur.ga",
+  "coolmail.ooo",
+  "alliancewe.us",
+  "wpower.info",
+  "besttandberg.com",
+  "titaspaharpur5.ml"
 ];
 (async () => {
   try {
@@ -359,7 +359,5 @@ const domain = [
         console.log("");
       }
     }
-  } catch (e) {
-    handleError(e);
-  }
+  } catch (e) {}
 })();
