@@ -125,10 +125,11 @@ const functionGetLocation = domain =>
       if (array[ury].length == 44) {
         const getLocation = await functionGetLocation(array[ury]);
 
-        const regex = await new RegExp(/\?(?:code)\=([\S\s]*?)\&/);
+        const regex = await new RegExp(/(?:code)\=([\S\s]*?)\&/);
         const regexEm = await new RegExp(/[.\w]+@[\w\-]{3,}(.\w{2,})+/);
         const resGex = await regex.exec(getLocation);
         const resGexEm = await regexEm.exec(getLocation);
+
         await delay(DelaY);
         const veryf = await functionVerification(resGexEm[0], resGex[1]);
         // const msg = JSON.parse(veryf).error.status;
