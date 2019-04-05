@@ -275,7 +275,7 @@ const domain = ["uselessmail.online"];
               `https://waste.email/main.php?${email}`
           );
           fs.appendFile(
-            "result_url.txt",
+            "result_waste.txt",
             `https://waste.email/main.php?${email} \n`,
             "utf-8"
           );
@@ -288,7 +288,7 @@ const domain = ["uselessmail.online"];
               " " +
               "Lokasi Link :" +
               " " +
-              `result_url.txt`
+              `result_waste.txt`
           );
           console.log("");
           console.log("");
