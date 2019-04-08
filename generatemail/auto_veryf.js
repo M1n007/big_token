@@ -28,7 +28,7 @@ console.log("");
 const functionGetMessages = (email, domain) =>
   new Promise((resolve, reject) => {
     fetch(
-      `https://xg3m9u4nn8.execute-api.us-east-2.amazonaws.com/big/api/v1/message?uname=${email}&domain=${domain}`,
+      `https://zwlh6m2210.execute-api.us-east-2.amazonaws.com/token/api/v1/message?uname=${email}&domain=${domain}`,
       {
         method: "POST"
       }
@@ -54,7 +54,7 @@ const functionGetMessages = (email, domain) =>
 const functionVerification = (email, token) =>
   new Promise((resolve, reject) => {
     fetch(
-      `https://xg3m9u4nn8.execute-api.us-east-2.amazonaws.com/big/api/v1/email-verification?email=${email}&token=${token}`,
+      `https://zwlh6m2210.execute-api.us-east-2.amazonaws.com/token/api/v1/email-verification?email=${email}&token=${token}`,
       {
         method: "POST",
         headers: { "x-api-key": `${apikey}` }
@@ -81,7 +81,7 @@ const functionVerification = (email, token) =>
 const functionGetLocation = domain =>
   new Promise((resolve, reject) => {
     fetch(
-      `https://xg3m9u4nn8.execute-api.us-east-2.amazonaws.com/big/api/v1/get-location?url=${domain}`,
+      `https://zwlh6m2210.execute-api.us-east-2.amazonaws.com/token/api/v1/get-location?url=${domain}`,
       {
         method: "POST",
         headers: { "x-api-key": `${apikey}` }

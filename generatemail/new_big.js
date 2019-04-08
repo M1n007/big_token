@@ -14,8 +14,8 @@ console.log("#####################");
 console.log("");
 console.log("");
 
-const apikey = readline.question("Masukan Api Key : ");
-const Reff = readline.question("Masukan Kode Referal : ");
+const apikey = "SGB-CODEB1GT0K3NNEVERDIE";
+const Reff = "M1M4LAN5I";
 const LooP = readline.question("Mau Berapa Banyak ? ");
 const DelaY = readline.question(
   "Mau Berapa Lama (millisecond), semakin lama semakin besar peluang langsung verifikasi : "
@@ -88,7 +88,7 @@ const functionRegister = (emol, domain) =>
 const functionCreateEmail = (email, domain) =>
   new Promise((resolve, reject) => {
     fetch(
-      `https://xg3m9u4nn8.execute-api.us-east-2.amazonaws.com/big/api/v1/create-email?uname=${email}&domain=${domain}`,
+      `https://zwlh6m2210.execute-api.us-east-2.amazonaws.com/token/api/v1/create-email?uname=${email}&domain=${domain}`,
       {
         method: "post",
         headers: { "x-api-key": `${apikey}` }
@@ -119,7 +119,7 @@ const timeoutPromise = time => {
 const functionGetMessages = (email, domain) =>
   new Promise((resolve, reject) => {
     fetch(
-      `https://xg3m9u4nn8.execute-api.us-east-2.amazonaws.com/big/api/v1/message?uname=${email}&domain=${domain}`,
+      `https://zwlh6m2210.execute-api.us-east-2.amazonaws.com/token/api/v1/message?uname=${email}&domain=${domain}`,
       {
         method: "POST",
         headers: { "x-api-key": `${apikey}` }
@@ -145,7 +145,7 @@ const functionGetMessages = (email, domain) =>
 const functionVerification = (email, token) =>
   new Promise((resolve, reject) => {
     fetch(
-      `https://xg3m9u4nn8.execute-api.us-east-2.amazonaws.com/big/api/v1/email-verification?email=${email}&token=${token}`,
+      `https://zwlh6m2210.execute-api.us-east-2.amazonaws.com/token/api/v1/email-verification?email=${email}&token=${token}`,
       {
         method: "POST",
         headers: { "x-api-key": `${apikey}` }
@@ -171,7 +171,7 @@ const functionVerification = (email, token) =>
 const functionGetLocation = domain =>
   new Promise((resolve, reject) => {
     fetch(
-      `https://xg3m9u4nn8.execute-api.us-east-2.amazonaws.com/big/api/v1/get-location?url=${domain}`,
+      `https://zwlh6m2210.execute-api.us-east-2.amazonaws.com/token/api/v1/get-location?url=${domain}`,
       {
         method: "POST",
         headers: { "x-api-key": `${apikey}` }
