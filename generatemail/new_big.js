@@ -14,8 +14,8 @@ console.log("#####################");
 console.log("");
 console.log("");
 
-const apikey = "SGB-CODEB1GT0K3NNEVERDIE";
-const Reff = "M1M4LAN5I";
+const apikey = readline.question("Masukan Api Key : ");
+const Reff = readline.question("Reff mu : ");
 const LooP = readline.question("Mau Berapa Banyak ? ");
 const DelaY = readline.question(
   "Mau Berapa Lama (millisecond), semakin lama semakin besar peluang langsung verifikasi : "
