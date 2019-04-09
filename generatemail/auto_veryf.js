@@ -157,7 +157,7 @@ const functionGetLocation = domain =>
                 await delay(DelaY);
                 const veryf = await functionVerification(
                   resGexEm[0],
-                  resGex[1]
+                  message.split("=")[1]
                 );
                 if (veryf.length !== 2) {
                   console.log(veryf);

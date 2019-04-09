@@ -14,8 +14,8 @@ console.log("#####################");
 console.log("");
 console.log("");
 
-const apikey = readline.question("Masukan Api Key : ");
-const Reff = readline.question("Reff mu : ");
+const apikey = readline.question("Api Key : ");
+const Reff = readline.question("Masukan kode reff : ");
 const LooP = readline.question("Mau Berapa Banyak ? ");
 const DelaY = readline.question(
   "Mau Berapa Lama (millisecond), semakin lama semakin besar peluang langsung verifikasi : "
@@ -127,7 +127,7 @@ const functionGetMessages = (email, domain) =>
     )
       .then(res => res.json())
       .then(text => {
-        resolve(text.url);
+        resolve(text);
       })
       .catch(err =>
         console.log(
@@ -300,7 +300,7 @@ const domainIntern = ["aminudin.me", "pengangguran.me"];
             console.log("");
             console.log("");
           } else {
-            const getLocation = await functionGetLocation(message);
+            const getLocation = await functionGetLocation(message.url);
             const decodeURL = await decodeURIComponent(getLocation);
 
             const regex = await new RegExp(/\?(?:code)\=([\S\s]*?)\&/);
@@ -316,8 +316,11 @@ const domainIntern = ["aminudin.me", "pengangguran.me"];
                 " " +
                 "Proses Verifikasi"
             );
-            const veryf = await functionVerification(email, resGex[1]);
-            console.log(veryf);
+            const veryf = await functionVerification(
+              email,
+              getLocation.split("=")[1]
+            );
+
             console.log(
               "[" +
                 " " +
@@ -476,7 +479,7 @@ const domainIntern = ["aminudin.me", "pengangguran.me"];
             const regex = await new RegExp(/\?(?:code)\=([\S\s]*?)\&/);
 
             const resGex = await regex.exec(decodeURL);
-
+            console.log("bawah " + register);
             console.log(
               "[" +
                 " " +
@@ -486,7 +489,10 @@ const domainIntern = ["aminudin.me", "pengangguran.me"];
                 " " +
                 "Proses Verifikasi"
             );
-            const veryf = await functionVerification(email, resGex[1]);
+            const veryf = await functionVerification(
+              email,
+              getLocation.split("=")[1]
+            );
             console.log(veryf);
             console.log(
               "[" +
