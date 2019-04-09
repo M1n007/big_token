@@ -13,7 +13,6 @@ console.log("#####################");
 console.log("");
 console.log("");
 
-const apikey = readline.question("Masukan Api Key : ");
 const Reff = readline.question("Masukan Kode Referal : ");
 const EmaIl = readline.question("masukan alamat gmail : ");
 const DelaY = readline.question("Mau Berapa Lama (millisecond) : ");
