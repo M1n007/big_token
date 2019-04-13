@@ -15,7 +15,7 @@ console.log("#####################");
 console.log("");
 console.log("");
 
-const apikey = readline.question("Masukan Api Key : ");
+const apikey = readline.question("Masukan Kode SGB : ");
 const file = readline.question("Masukan nama file result : ");
 
 const DelaY = readline.question(
@@ -27,36 +27,32 @@ console.log("");
 
 const functionGetMessages = (email, domain) =>
   new Promise((resolve, reject) => {
-    fetch(
-      `https://zwlh6m2210.execute-api.us-east-2.amazonaws.com/token/api/v1/message?uname=${email}&domain=${domain}`,
-      {
-        method: "POST",
-
-        headers: { "x-api-key": `${apikey}` }
+    fetch(`https://generator.email/`, {
+      method: "get",
+      headers: {
+        accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+        "accept-encoding": "gzip, deflate, br",
+        cookie: `_ga=GA1.2.1164348503.1554262465; _gid=GA1.2.905585996.1554262465; embx=%5B%22${email}%40${domain}%22%2C%22hcycl%40nongzaa.tk%22%5D; _gat=1; io=-aUNS6XIdbbHj__faWS_; surl=${domain}%2F${email}`,
+        "upgrade-insecure-requests": 1,
+        "user-agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36"
       }
-    )
-      .then(res => res.json())
+    })
+      .then(res => res.text())
       .then(text => {
-        resolve(text);
+        const $ = cheerio.load(text);
+        const src = $(".button").attr("href");
+
+        resolve(src);
       })
-      .catch(err =>
-        console.log(
-          "[" +
-            " " +
-            moment().format("HH:mm:ss") +
-            " " +
-            "]" +
-            " " +
-            "Ada masalah sssSssstt..." +
-            err
-        )
-      );
+      .catch(err => reject(err));
   });
 
 const functionVerification = (email, token) =>
   new Promise((resolve, reject) => {
     fetch(
-      `https://zwlh6m2210.execute-api.us-east-2.amazonaws.com/token/api/v1/email-verification?email=${email}&token=${token}`,
+      `https://x1bbuj6m1m.execute-api.us-east-2.amazonaws.com/token/api/v1/email-verification?email=${email}&token=${token}`,
       {
         method: "POST",
         headers: { "x-api-key": `${apikey}` }
@@ -82,29 +78,34 @@ const functionVerification = (email, token) =>
 
 const functionGetLocation = domain =>
   new Promise((resolve, reject) => {
-    fetch(
-      `https://zwlh6m2210.execute-api.us-east-2.amazonaws.com/token/api/v1/get-location?url=${domain}`,
-      {
-        method: "POST",
-        headers: { "x-api-key": `${apikey}` }
+    const userAgent =
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36";
+    const url = `${domain}`;
+
+    const _include_headers = function(body, response, resolveWithFullResponse) {
+      return {
+        headers: response.headers,
+        data: body,
+        finalUrl: response.request.uri.href // contains final URL
+      };
+    };
+
+    const options = {
+      uri: url,
+      followAllRedirects: true,
+      method: "get",
+      gzip: true,
+      transform: _include_headers,
+      headers: {
+        "User-Agent": userAgent
       }
-    )
-      .then(res => res.text())
-      .then(text => {
-        resolve(text);
+    };
+
+    const p1 = rp(options)
+      .then((response, error, html) => {
+        resolve(response.finalUrl);
       })
-      .catch(err =>
-        console.log(
-          "[" +
-            " " +
-            moment().format("HH:mm:ss") +
-            " " +
-            "]" +
-            " " +
-            "Ada masalah sssSssstt..." +
-            err
-        )
-      );
+      .catch(err => reject(err));
   });
 
 (async () => {
@@ -152,7 +153,7 @@ const functionGetLocation = domain =>
             await delay(DelaY);
             const message = await functionGetMessages(unem, domain);
 
-            if (message.url === undefined) {
+            if (message === undefined) {
               console.log(
                 "[" +
                   " " +
@@ -165,9 +166,9 @@ const functionGetLocation = domain =>
               console.log("");
               console.log("");
             } else {
-              if (message.url.length < 60) {
+              if (message.length < 60) {
                 try {
-                  const getLocation = await functionGetLocation(message.url);
+                  const getLocation = await functionGetLocation(message);
 
                   const regex = await new RegExp(/\?(?:code)\=([\S\s]*?)\&/);
                   const regexEm = await new RegExp(

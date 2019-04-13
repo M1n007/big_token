@@ -5,7 +5,7 @@ const readline = require("readline-sync");
 const colors = require("../lib/colors");
 const fs = require("async-file");
 const fss = require("fs");
-const { URLSearchParams } = require("url");
+
 const moment = require("moment");
 const rp = require("request-promise");
 
@@ -16,7 +16,7 @@ console.log("#####################");
 console.log("");
 console.log("");
 
-const apikey = readline.question("Masukan Api Key : ");
+const apikey = "SGB-00f2b8b718";
 const file = readline.question("Masukan nama file  : ");
 
 const DelaY = readline.question(
@@ -52,7 +52,7 @@ const functionGetMessages = (email, domain) =>
 const functionVerification = (email, token) =>
   new Promise((resolve, reject) => {
     fetch(
-      `https://zwlh6m2210.execute-api.us-east-2.amazonaws.com/token/api/v1/email-verification?email=${email}&token=${token}`,
+      `https://x1bbuj6m1m.execute-api.us-east-2.amazonaws.com/token/api/v1/email-verification?email=${email}&token=${token}`,
       {
         method: "POST",
         headers: { "x-api-key": `${apikey}` }
@@ -79,7 +79,7 @@ const functionVerification = (email, token) =>
 const functionGetLocation = domain =>
   new Promise((resolve, reject) => {
     fetch(
-      `https://zwlh6m2210.execute-api.us-east-2.amazonaws.com/token/api/v1/get-location?url=${domain}`,
+      `https://x1bbuj6m1m.execute-api.us-east-2.amazonaws.com/token/api/v1/get-location?url=${domain}`,
       {
         method: "POST",
         headers: { "x-api-key": `${apikey}` }
@@ -107,40 +107,52 @@ const functionGetLocation = domain =>
   console.log(
     "[" + " " + moment().format("HH:mm:ss") + " " + "]" + " " + "MEMULAI ...."
   );
-  await fss.readFile(file, async function(err, data) {
-    if (err) throw err;
-    const array = data
-      .toString()
-      .replace(/\r\n|\r|\n/g, " ")
-      .split(" ");
+  try {
+    await fss.readFile(file, async function(err, data) {
+      if (err) throw err;
+      const array = data
+        .toString()
+        .replace(/\r\n|\r|\n/g, " ")
+        .split(" ");
 
-    for (let ury in array) {
-      if (array[ury].length < 60) {
-        const getLocation = await functionGetLocation(array[ury]);
+      for (let ury in array) {
+        if (array[ury] !== undefined && array[ury].length == 0) {
+          if (array[ury].length < 100) {
+            const getLocation = await functionGetLocation(array[ury]);
 
-        const regex = await new RegExp(/(?:code)\=([\S\s]*?)\&/);
-        const regexEm = await new RegExp(/[.\w]+@[\w\-]{3,}(.\w{2,})+/);
-        const resGex = await regex.exec(getLocation);
-        const resGexEm = await regexEm.exec(getLocation);
-        if (resGexEm !== null) {
-          await delay(DelaY);
-          const veryf = await functionVerification(resGexEm[0], resGex[1]);
-          console.log(veryf);
+            const regex = await new RegExp(/(?:code)\=([\S\s]*?)\&/);
+            const regexEm = await new RegExp(/[.\w]+@[\w\-]{3,}(.\w{2,})+/);
+            const resGex = await regex.exec(getLocation);
+            const resGexEm = await regexEm.exec(getLocation);
+            const em = getLocation.split("email=")[1].replace(/\s*"\s*/g, "");
+            const emm = em.replace(/\+/g, "%2b");
+            console.log(emm + resGex[1]);
+            if (resGexEm !== null) {
+              await delay(DelaY);
+              const veryf = await functionVerification(emm, resGex[1]);
+              console.log(veryf);
+            }
+          } else {
+            const decodeURL = await decodeURIComponent(array[ury]);
+
+            const regex = await new RegExp(/\?(?:code)\=([\S\s]*?)\&/);
+            const regexEm = await new RegExp(
+              /([\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/
+            );
+            const resGex = await regex.exec(decodeURL);
+            const resGexEm = await regexEm.exec(decodeURL);
+
+            await delay(DelaY);
+            const veryf = await functionVerification(
+              resGexEm[0].replace(/\+/g, "%2b"),
+              resGex[1]
+            );
+            console.log(veryf);
+          }
         }
-      } else {
-        const decodeURL = await decodeURIComponent(array[ury]);
-
-        const regex = await new RegExp(/\?(?:code)\=([\S\s]*?)\&/);
-        const regexEm = await new RegExp(
-          /([\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/
-        );
-        const resGex = await regex.exec(decodeURL);
-        const resGexEm = await regexEm.exec(decodeURL);
-
-        await delay(DelaY);
-        const veryf = await functionVerification(resGexEm[0], resGex[1]);
-        console.log(veryf);
       }
-    }
-  });
+    });
+  } catch (e) {
+    console.log(e);
+  }
 })();

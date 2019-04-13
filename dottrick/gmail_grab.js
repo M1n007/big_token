@@ -22,7 +22,7 @@ const mailListener = new MailListener({
   tls: true,
   connTimeout: 10000, // Default by node-imap
   authTimeout: 5000, // Default by node-imap,
-  debug: console.log, // Or your custom function with only one incoming argument. Default: null
+  debug: null, // Or your custom function with only one incoming argument. Default: null
   tlsOptions: { rejectUnauthorized: false },
   mailbox: "INBOX", // mailbox to monitor
   searchFilter: ["ALL", ["SUBJECT", "BIGtoken"]], // the search filter being used after an IDLE notification has been retrieved
@@ -36,30 +36,32 @@ mailListener.start(); // start listening
 // stop listening
 //mailListener.stop();
 
-mailListener.on("server:connected", function() {
-  console.log("imapConnected");
-});
+// mailListener.on("server:connected", function() {
+//   console.log("imapConnected");
+// });
 
-mailListener.on("server:disconnected", function() {
-  console.log("imapDisconnected");
-});
+// mailListener.on("server:disconnected", function() {
+//   console.log("imapDisconnected");
+// });
 
 mailListener.on("mail", function(mail, seqno, attributes) {
   // do something with mail object including attachments
 
   const $ = cheerio.load(mail.html);
   const src = $(".button").attr("href");
-  fs.appendFile("result_gmail.txt", `${src}\n`, "utf-8");
-  console.log(
-    "[" +
-      " " +
-      moment().format("HH:mm:ss") +
-      " " +
-      "]" +
-      " " +
-      "Lokasi Link :" +
-      " " +
-      `result_gmail.txt`
-  );
+  if (src !== undefined && src.length !== 0) {
+    fs.appendFile("result_gmail.txt", `${src}\n`, "utf-8");
+    console.log(
+      "[" +
+        " " +
+        moment().format("HH:mm:ss") +
+        " " +
+        "]" +
+        " " +
+        "Lokasi Link :" +
+        " " +
+        `result_gmail.txt`
+    );
+  }
   // mail processing code goes here
 });

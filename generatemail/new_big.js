@@ -6,6 +6,7 @@ const fs = require("async-file");
 const { URLSearchParams } = require("url");
 const moment = require("moment");
 const rp = require("request-promise");
+const ua = require("useragent-generator");
 
 console.log("#####################");
 console.log("Panggil w Amin Tamvan");
@@ -14,7 +15,7 @@ console.log("#####################");
 console.log("");
 console.log("");
 
-const apikey = readline.question("Masukan Api Key : ");
+const apikey = readline.question("Masukan kode SGB : ");
 const Reff = readline.question("Masukan Kode Referal : ");
 const LooP = readline.question("Mau Berapa Banyak ? ");
 const DelaY = readline.question(
@@ -36,76 +37,29 @@ console.log("");
 const functionRegister = (emol, domain) =>
   new Promise((resolve, reject) => {
     const email = `${emol}@${domain}`;
-    var _0x3957 = [
-      "append",
-      "email",
-      "password",
-      "Coegsekali1!",
-      "referral_id",
-      "https://api.bigtoken.com/signup",
-      "application/json",
-      "application/x-www-form-urlencoded\x20",
-      "api.bigtoken.com",
-      "gzip\x20",
-      "text",
-      "then",
-      "catch"
-    ];
-    (function(_0xc951b5, _0x13bf97) {
-      var _0x2e2af4 = function(_0x32ae40) {
-        while (--_0x32ae40) {
-          _0xc951b5["push"](_0xc951b5["shift"]());
-        }
-      };
-      _0x2e2af4(++_0x13bf97);
-    })(_0x3957, 0x68);
-    var _0x2b26 = function(_0x44c093, _0x559e69) {
-      _0x44c093 = _0x44c093 - 0x0;
-      var _0x3856b8 = _0x3957[_0x44c093];
-      return _0x3856b8;
-    };
-    const params = new URLSearchParams();
-    params[_0x2b26("0x0")](_0x2b26("0x1"), email);
-    params[_0x2b26("0x0")](_0x2b26("0x2"), _0x2b26("0x3"));
-    params[_0x2b26("0x0")](_0x2b26("0x4"), Reff);
-    params[_0x2b26("0x0")]("monetize", 0x1);
-    fetch(_0x2b26("0x5"), {
-      method: "POST",
-      body: params,
-      headers: {
-        Accept: _0x2b26("0x6"),
-        "Content-Type": _0x2b26("0x7"),
-        Host: _0x2b26("0x8"),
-        Connection: "Keep-Alive",
-        "Accept-Encoding": _0x2b26("0x9")
+    fetch(
+      `https://x1bbuj6m1m.execute-api.us-east-2.amazonaws.com/token/api/v1/register?email=${email}&Reff=${Reff}`,
+      {
+        method: "post",
+        headers: { "x-api-key": `${apikey}` }
       }
-    })
-      ["then"](_0x45738a => _0x45738a[_0x2b26("0xa")]())
-      [_0x2b26("0xb")](_0x4ebdb4 => resolve(_0x4ebdb4))
-      [_0x2b26("0xc")](_0x1fb119 => reject(_0x1fb119));
+    )
+      .then(res => res.text())
+      .then(te => resolve(te))
+      .catch(err => reject(err));
   });
 
 const functionCreateEmail = (email, domain) =>
   new Promise((resolve, reject) => {
     fetch(
-      `https://zwlh6m2210.execute-api.us-east-2.amazonaws.com/token/api/v1/create-email?uname=${email}&domain=${domain}`,
+      `https://x1bbuj6m1m.execute-api.us-east-2.amazonaws.com/token/api/v1/create-email?uname=${email}&domain=${domain}`,
       {
         method: "post",
         headers: { "x-api-key": `${apikey}` }
       }
     )
       .then(res => resolve(res))
-      .catch(err =>
-        console.log(
-          "[" +
-            " " +
-            moment().format("HH:mm:ss") +
-            " " +
-            "]" +
-            " " +
-            "Ada masalah sssSssstt..."
-        )
-      );
+      .catch(err => reject(err));
   });
 
 const timeoutPromise = time => {
@@ -118,37 +72,32 @@ const timeoutPromise = time => {
 
 const functionGetMessages = (email, domain) =>
   new Promise((resolve, reject) => {
-    fetch(
-      `https://zwlh6m2210.execute-api.us-east-2.amazonaws.com/token/api/v1/message?uname=${email}&domain=${domain}`,
-      {
-        method: "POST",
-        headers: { "x-api-key": `${apikey}` }
+    fetch(`https://generator.email/`, {
+      method: "get",
+      headers: {
+        accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+        "accept-encoding": "gzip, deflate, br",
+        cookie: `_ga=GA1.2.1164348503.1554262465; _gid=GA1.2.905585996.1554262465; embx=%5B%22${email}%40${domain}%22%2C%22hcycl%40nongzaa.tk%22%5D; _gat=1; io=-aUNS6XIdbbHj__faWS_; surl=${domain}%2F${email}`,
+        "upgrade-insecure-requests": 1,
+        "user-agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36"
       }
-    )
-      .then(res => res.json())
+    })
+      .then(res => res.text())
       .then(text => {
-        resolve(text);
+        const $ = cheerio.load(text);
+        const src = $(".button").attr("href");
+
+        resolve(src);
       })
-      .catch(err =>
-        console.log(
-          "[" +
-            " " +
-            moment().format("HH:mm:ss") +
-            " " +
-            "]" +
-            " " +
-            "Ada masalah sssSssstt..." +
-            " " +
-            "Error :" +
-            err
-        )
-      );
+      .catch(err => reject(err));
   });
 
 const functionVerification = (email, token) =>
   new Promise((resolve, reject) => {
     fetch(
-      `https://zwlh6m2210.execute-api.us-east-2.amazonaws.com/token/api/v1/email-verification?email=${email}&token=${token}`,
+      `https://x1bbuj6m1m.execute-api.us-east-2.amazonaws.com/token/api/v1/email-verification?email=${email}&token=${token}`,
       {
         method: "POST",
         headers: { "x-api-key": `${apikey}` }
@@ -173,28 +122,34 @@ const functionVerification = (email, token) =>
 
 const functionGetLocation = domain =>
   new Promise((resolve, reject) => {
-    fetch(
-      `https://zwlh6m2210.execute-api.us-east-2.amazonaws.com/token/api/v1/get-location?url=${domain}`,
-      {
-        method: "POST",
-        headers: { "x-api-key": `${apikey}` }
+    const userAgent =
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36";
+    const url = `${domain}`;
+
+    const _include_headers = function(body, response, resolveWithFullResponse) {
+      return {
+        headers: response.headers,
+        data: body,
+        finalUrl: response.request.uri.href // contains final URL
+      };
+    };
+
+    const options = {
+      uri: url,
+      followAllRedirects: true,
+      method: "get",
+      gzip: true,
+      transform: _include_headers,
+      headers: {
+        "User-Agent": userAgent
       }
-    )
-      .then(res => res.text())
-      .then(text => {
-        resolve(text);
+    };
+
+    const p1 = rp(options)
+      .then((response, error, html) => {
+        resolve(response.finalUrl);
       })
-      .catch(err =>
-        console.log(
-          "[" +
-            " " +
-            moment().format("HH:mm:ss") +
-            " " +
-            "]" +
-            " " +
-            "Ada masalah sssSssstt..."
-        )
-      );
+      .catch(err => reject(err));
   });
 
 const genEmail = length =>
@@ -209,6 +164,18 @@ const genEmail = length =>
     resolve(text);
   });
 
+// const genClientID = () =>
+//   new Promise((resolve, reject) => {
+//     var text = "";
+//     var possible =
+//       "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+//     for (var i = 0; i < 68; i++)
+//       text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+//     resolve(text);
+//   });
+
 const domain = [];
 const domainIntern = ["aminudin.me", "pengangguran.me"];
 (async () => {
@@ -219,7 +186,9 @@ const domainIntern = ["aminudin.me", "pengangguran.me"];
         const item = await domainIntern[
           (Math.random() * domainIntern.length) | 0
         ];
-        const emel = await genEmail(10);
+        const emel = await genEmail(70);
+        // const client = await genClientID();
+
         await delay(10000);
         const register = await functionRegister(emel, item);
         const email = emel + "@" + item;
@@ -235,7 +204,10 @@ const domainIntern = ["aminudin.me", "pengangguran.me"];
             "Membuat Email..."
         );
 
-        if (register.length < 70) {
+        if (
+          register.includes(`data": {
+          "user_id`)
+        ) {
           await console.log(
             "[" +
               " " +
@@ -246,6 +218,18 @@ const domainIntern = ["aminudin.me", "pengangguran.me"];
               "Sukses register dengan email :" +
               " " +
               `${email}`
+          );
+
+          await console.log(
+            "[" +
+              " " +
+              moment().format("HH:mm:ss") +
+              " " +
+              "]" +
+              " " +
+              "Code register :" +
+              " " +
+              `${register}`
           );
 
           const createMail = await functionCreateEmail(emel, item);
@@ -263,7 +247,7 @@ const domainIntern = ["aminudin.me", "pengangguran.me"];
 
           const message = await functionGetMessages(emel, item);
 
-          if (message.url === undefined) {
+          if (message === undefined) {
             console.log(
               "[" +
                 " " +
@@ -303,7 +287,7 @@ const domainIntern = ["aminudin.me", "pengangguran.me"];
             console.log("");
             console.log("");
           } else {
-            const getLocation = await functionGetLocation(message.url);
+            const getLocation = await functionGetLocation(message);
             const decodeURL = await decodeURIComponent(getLocation);
 
             const regex = await new RegExp(/\?(?:code)\=([\S\s]*?)\&/);
@@ -382,7 +366,7 @@ const domainIntern = ["aminudin.me", "pengangguran.me"];
               " " +
               "]" +
               " " +
-              "Email Sudah Terdaftar / Tidak Valid"
+              "Failed Register / Hal lain"
           );
           console.log(
             "[" +
@@ -446,6 +430,8 @@ const domainIntern = ["aminudin.me", "pengangguran.me"];
             "Membuat Email..."
         );
 
+        console.log(register);
+
         if (register.length < 70) {
           await console.log(
             "[" +
@@ -457,6 +443,18 @@ const domainIntern = ["aminudin.me", "pengangguran.me"];
               "Sukses register dengan email :" +
               " " +
               `${email}`
+          );
+
+          await console.log(
+            "[" +
+              " " +
+              moment().format("HH:mm:ss") +
+              " " +
+              "]" +
+              " " +
+              "Code register :" +
+              " " +
+              `${register}`
           );
 
           const createMail = await functionCreateEmail(emel, item);
@@ -474,7 +472,7 @@ const domainIntern = ["aminudin.me", "pengangguran.me"];
 
           const message = await functionGetMessages(emel, item);
 
-          if (message.url === undefined) {
+          if (message === undefined) {
             console.log(
               "[" +
                 " " +
@@ -514,7 +512,7 @@ const domainIntern = ["aminudin.me", "pengangguran.me"];
             console.log("");
             console.log("");
           } else {
-            const getLocation = await functionGetLocation(message.url);
+            const getLocation = await functionGetLocation(message);
             const decodeURL = await decodeURIComponent(getLocation);
 
             const regex = await new RegExp(/\?(?:code)\=([\S\s]*?)\&/);
